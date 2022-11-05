@@ -90,8 +90,10 @@ func main() {
 				fmt.Println("Too many requests slow down")
 				return
 			}
+
+			// To create a delay
 			fmt.Println("Sleeping for ---->", (10-2*i)*int(time.Second))
-			time.Sleep(time.Duration((20 - i) * int(time.Second)))
+			time.Sleep(time.Duration((20) * int(time.Second)))
 			bucket.bucket.Completed()
 
 		} else {
