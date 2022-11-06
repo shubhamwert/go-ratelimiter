@@ -19,16 +19,21 @@ var STATIC_API_KEYS map[string]struct{}
 var buckets map[string]bucketType = make(map[string]bucketType)
 
 func main() {
-	b, err := CreateNewBucket(3)
-	if err != nil {
-		fmt.Println("Failed to create bucket")
-		return
-	}
-	buckets["123"] = bucketType{apiKey: "123", bucket: b}
-
-	fmt.Println("Starting rate limiter")
 	STATIC_API_KEYS := make(map[string]struct{})
-	STATIC_API_KEYS["123"] = struct{}{}
+
+	for _, i := range []string{"1", "2", "3"} {
+
+		b, err := CreateNewBucket(3)
+
+		if err != nil {
+			fmt.Println("Failed to create bucket number ", i)
+			continue
+		}
+		buckets[i] = bucketType{apiKey: i, bucket: b}
+		fmt.Println("Starting rate limiters ", i)
+		STATIC_API_KEYS[i] = struct{}{}
+
+	}
 	router := mux.NewRouter()
 	i := 0
 	router.HandleFunc("/get", func(w http.ResponseWriter, r *http.Request) {
@@ -48,7 +53,11 @@ func main() {
 		_, ok := STATIC_API_KEYS[ApiKey]
 
 		if !ok {
-
+			// fmt.Println(STATIC_API_KEYS.])
+			for k, _ := range STATIC_API_KEYS {
+				println(k, " ++")
+			}
+			fmt.Println("API-Key==> ", ApiKey)
 			w.Header().Set("Content-Type", "text/html")
 			w.WriteHeader(401)
 			return
@@ -92,9 +101,8 @@ func main() {
 			}
 
 			// To create a delay
-			fmt.Println("Sleeping for ---->", (10-2*i)*int(time.Second))
+			fmt.Println("Sleeping for ---->", (10)*int(time.Second))
 			time.Sleep(time.Duration((20) * int(time.Second)))
-			bucket.bucket.Completed()
 
 		} else {
 			fmt.Println("Key Not Found")
@@ -120,3 +128,5 @@ func copyHeader(dst, src http.Header) {
 		}
 	}
 }
+
+// https://pkg.go.dev/golang.org/x/time/rate
