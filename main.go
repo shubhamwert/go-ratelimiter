@@ -54,9 +54,7 @@ func main() {
 
 		if !ok {
 			// fmt.Println(STATIC_API_KEYS.])
-			for k, _ := range STATIC_API_KEYS {
-				println(k, " ++")
-			}
+
 			fmt.Println("API-Key==> ", ApiKey)
 			w.Header().Set("Content-Type", "text/html")
 			w.WriteHeader(401)

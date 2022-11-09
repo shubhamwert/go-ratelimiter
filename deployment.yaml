@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ratelimiter
+spec:
+  selector:
+    matchLabels:
+      app: ratelimiter
+  template:
+    metadata:
+      labels:
+        app: ratelimiter
+    spec:
+      containers:
+      - name: ratelimiter
+        image: <repo>/rate-limiter:latest
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8080
